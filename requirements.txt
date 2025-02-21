@@ -1,0 +1,13 @@
+beautifulsoup4==4.13.3
+Levenshtein==0.26.1
+numpy==1.23.5
+openpyxl==3.1.5
+pandas==1.5.3
+pygsheets==2.0.6
+pykakasi==2.3.0
+pypinyin==0.53.0
+PySide6==6.8.0.2
+qt-material==2.14
+waapi-client==0.7.2
+wavio==0.0.9
+jiwer==3.0.5
