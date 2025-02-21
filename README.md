@@ -23,7 +23,7 @@ This library is a collection of general-purpose utility functions specifically d
     - Wrappers for creating common GUI elements with PySide6
 - **Utils**
     
-    - System-level utility functions, including Retry decorators, JSON read/write utilities, file operations, path handling, and common regular expressions for audio file naming
+    - System-level utility functions, including Retry decorators, JSON read/write utilities, file operations, path handling, spreadsheet processing, and common regular expressions for audio file naming
 
 ---
 
@@ -54,7 +54,7 @@ pip install dvatioff-audio
 - **GUI**
 	- 对 Pyside6 常用 GUI 元素创建的封装
 - **Utils**
-	- 系统级通用函数，如 Retry 装饰器、JSON 读取保存、文件操作、路径处理、常用音频命名正则表达式等
+	- 系统级通用函数，如 Retry 装饰器、JSON 读取保存、文件操作、路径处理、表格处理、常用音频命名正则表达式等
 
 
 ## 安装
