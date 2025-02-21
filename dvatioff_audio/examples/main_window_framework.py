@@ -19,29 +19,25 @@ class MainWindow(QMainWindow):
         self.setting = QSettings("dvatiOFF", "导入选择")
         self.setWindowIcon(QIcon(""))
 
-        self.threadpool = QThreadPool()
+        self.threadpool = QThreadPool()  # 线程池
         self.thread_waapi_connect = None
         self.worker_waapi_connect = None
         self.worker_get_wwise_selected_objects = None
-        self.waapi_client = None
-        self.connect_status = False
-        self.connected = g.UNCONNECTED
-        self.wwise_project_name = None
-        self.wwise_version = None
-        self.statusBar = None
-        self.status_message = None
-        self.status_color = None
 
-        self.confirm_window = None
-        self.settings_modification_window = None
-        self.vo_placeholder_notification_window = None
-        self.audio_name_vfy_window = None
-        self.text_speech_vfy_window = None
+        self.waapi_client = None  # WAAPI 客户端
+        self.connect_status = False  # WAAPI 的连接状态
+        self.connected = g.UNCONNECTED  # WAAPI 详细的连接状态，分为 未连接/已连接/连接至错误的 Wwise 工程或版本 三种状态
+        self.wwise_project_name = None  # Wwise 工程名称
+        self.wwise_version = None  # Wwise 版本
+        self.statusBar = None  # 状态栏
+        self.status_message = None  # 状态栏信息
+        self.status_color = None  # 状态栏颜色（表示连接状态）
 
-        self.wwise_selected_objects = []
-        self.wwise_selected_objects_legal = []
-        self.matched_replaced_audios = []
-        self.buttons_all = []
+        self.confirm_window = None  # 各类操作执行后弹出的确认窗口
+
+        self.wwise_selected_objects = []  # Wwise 中选中的对象
+        self.wwise_selected_objects_legal = []  # Wwise 中选中的合法对象
+        self.buttons_all = []  # 所有 GUI 按钮
         self.buttons_connect_activate = []  # 连接至 Wwise 后激活的按钮
 
         self.page_sfx_import = None  # 音效导入页面
