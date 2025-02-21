@@ -3,7 +3,6 @@ from PySide6.QtGui import QDesktopServices, QIntValidator
 from PySide6.QtWidgets import QLabel, QFrame, QPushButton, QLineEdit, QComboBox, QTextEdit, QTextBrowser, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QFormLayout, QCheckBox
 
-
 class CustomTooltip(QFrame):
     def __init__(self, text, parent=None):
         super().__init__(parent, Qt.ToolTip)
