@@ -1,3 +1,8 @@
+"""
+文本-语音对齐检测窗口框架
+"""
+
+
 import os
 import queue
 import threading
@@ -7,9 +12,9 @@ from PySide6.QtGui import QTextCursor, QIcon
 from PySide6.QtWidgets import QWidget
 import gui_css as sss
 from notification_window_framework import NotificationWindow
-from dvatioff_audio.utils import text_speech_vfy_worker, output_stt_error_files
-from dvatioff_audio.gui_utils import create_label, create_button, add_widgets_to_vhboxlayout, create_layout, create_textEdit
-from Utils.globals import PATH_ICON_VFY
+from dvatioff_audio.Voice.voice_utils import text_speech_verify_worker, output_text_speech_verify_result
+from dvatioff_audio.GUI.gui_utils import create_label, create_button, add_widgets_to_vhboxlayout, create_layout, create_textEdit
+from dvatioff_audio.globals import PATH_ICON_VFY
 
 
 class TextSpeechVerificationWorkerSignals(QObject):
@@ -27,7 +32,7 @@ class TextSpeechVerificationWorker(QRunnable):
 
     def run(self):
         update_queue = queue.Queue()
-        worker_thread = threading.Thread(target=text_speech_vfy_worker,
+        worker_thread = threading.Thread(target=text_speech_verify_worker,
                                          args=(self.folder_path, self.text_dict, self.language, update_queue))
         worker_thread.start()
         vfy_complete = False
@@ -201,7 +206,7 @@ class TextSpeechVFYWindow(QWidget):
 
     def output_log_and_files(self):
         folder_name = os.path.basename(self.folder_path)
-        output_stt_error_files(folder_name, self.error_file_paths, self.error_log, self.language)
+        output_text_speech_verify_result(folder_name, self.error_file_paths, self.error_log, self.language)
         self.output_button.setEnabled(False)
         self.notification_window = NotificationWindow('语音文本校验完毕', '输出成功, 错误文件和日志已保存至桌面')
         self.notification_window.show()
