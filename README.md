@@ -10,20 +10,20 @@ This library is a collection of general-purpose utility functions specifically d
 
 - **WAAPI**
     
-    - Wrappers for commonly used WAAPI interfaces.
-    - A multithreading class based on PySide6's QRunnable/Signal for real-time retrieval of WAAPI connection status and the selection status of Wwise Authoring objects.
-    - General utility functions, such as batch replacements of Originals files and complete silence filling for languages missing in multilingual projects.
+    - Wrappers for commonly used WAAPI interfaces
+    - A multithreading class based on PySide6's QRunnable/Signal for real-time retrieval of WAAPI connection status and the selection status of Wwise Authoring objects
+    - General utility functions, such as batch replacements of Originals files and complete silence filling for languages missing in multilingual projects
 - **Voice**
     
-    - Wrappers for Microsoft Azure's Text-to-Speech and Speech-to-Text (Whisper) interfaces.
-    - Text preprocessing, text distance, and word error rate calculations for four languages (Chinese, Japanese, English, and Korean).
-    - Simple sine wave generation.
+    - Wrappers for Microsoft Azure's Text-to-Speech and Speech-to-Text (Whisper) interfaces
+    - Text preprocessing, text distance, and word error rate calculations for four languages (Chinese, Japanese, English, and Korean)
+    - Simple sine wave generation
 - **GUI**
     
-    - Wrappers for creating common GUI elements with PySide6.
+    - Wrappers for creating common GUI elements with PySide6
 - **Utils**
     
-    - System-level utility functions, including Retry decorators, JSON read/write utilities, file operations, path handling, and common regular expressions for audio file naming.
+    - System-level utility functions, including Retry decorators, JSON read/write utilities, file operations, path handling, and common regular expressions for audio file naming
 
 ---
 
