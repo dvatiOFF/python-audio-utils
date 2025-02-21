@@ -1,7 +1,7 @@
 import os
-import time
-from functools import wraps
 from dvatioff_audio.utils import retry
+from lxml import etree
+from tqdm import tqdm
 
 
 @retry(Exception, tries=10, delay=1)
@@ -204,7 +204,7 @@ def import_audio_file(client, **kwargs):
 @retry(Exception, tries=10, delay=1)
 def get_wwise_originals_sfx_path(client):
     """
-    获取 Wwise Originals 文件夹路径
+    获取 Wwise Originals SFX 文件夹的路径
     """
     try:
         result = client.call("ak.wwise.core.getProjectInfo")
@@ -212,7 +212,7 @@ def get_wwise_originals_sfx_path(client):
             originals_path = result['directories']['originals']
             return os.path.join(originals_path, "SFX")
         else:
-            raise ValueError("获取 Wwise Originals 文件夹路径失败")
+            raise ValueError("获取 Wwise Originals SFX 文件夹路径失败")
     except Exception as e:
         print(f"调用 ak.wwise.core.getProjectInfo 时出错: {e}")
         return None
@@ -336,3 +336,34 @@ def delete_object(client, obj):
     except Exception as e:
         print(f"调用 ak.wwise.core.object.delete 时出错: {e}")
         return None
+
+
+# 下面的函数无需连接 WAAPI 即可调用
+def assign_obj_to_dynamic_event_path(container_dict, dynamic_event_wwu_path, wwu_guid):
+    """
+    由于 WAAPI 无法直接为 Dynamic Event 中的各 path 指定对象，因此需要通过解析 Wwise Work Unit 文件来实现
+    在指定规则下为 Dynamic Event 中的各 path 指定对象
+    """
+    tree = etree.parse(dynamic_event_wwu_path)
+    root = tree.getroot()
+    total_iterations = len(container_dict.keys())
+    with tqdm(total=total_iterations, desc="Adding Dynamic Path") as pbar:
+        for multi_switch_entry in root.findall('.//MultiSwitchEntry'):
+            pbar.update(1)
+            state_tuple = ()
+            for obj in multi_switch_entry.iterfind('.//ObjectRef'):
+                state_tuple += (obj.get('Name'),)
+
+            obj_id = container_dict[state_tuple]
+            obj_name = f"Hit_{state_tuple[0]}_{state_tuple[1]}_{state_tuple[2]}_{state_tuple[3]}"
+            reference_list = etree.SubElement(multi_switch_entry, "ReferenceList")
+            reference = etree.SubElement(reference_list, "Reference", Name='AudioNode')
+            object_ref = etree.SubElement(reference, "ObjectRef", Name=obj_name, ID=obj_id, WorkUnitID=wwu_guid)
+
+            object_lists = multi_switch_entry.find('.//ObjectLists')
+
+            index = list(multi_switch_entry).index(object_lists)
+            multi_switch_entry.insert(index, reference_list)
+
+    tree.write(dynamic_event_wwu_path, pretty_print=True)
+
