@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt, QUrl, QTimer, QObject, QEvent, QPoint
 from PySide6.QtGui import QDesktopServices, QIntValidator
-from PySide6.QtWidgets import QLabel, QFrame, QPushButton, QLineEdit, QComboBox, QTextEdit, QTextBrowser, QStatusBar, QVBoxLayout, QHBoxLayout, QGridLayout, \
-    QFormLayout, QCheckBox, QApplication
+from PySide6.QtWidgets import QLabel, QFrame, QPushButton, QLineEdit, QComboBox, QTextEdit, QTextBrowser, QVBoxLayout, QHBoxLayout, QGridLayout, \
+    QFormLayout, QCheckBox
 
 
 class CustomTooltip(QFrame):
@@ -157,7 +157,7 @@ def create_label(text, style=None, width=None, height=None, alignment=None, exte
     if external_link:
         label.setOpenExternalLinks(True)
     if link_activate:
-        label.linkActivated.connect(open_link)
+        label.linkActivated.connect(open_local_url)
     if invisible:
         label.setVisible(False)
     if tooltip:

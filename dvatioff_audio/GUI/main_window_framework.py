@@ -1,13 +1,13 @@
-from PySide6.QtCore import QSettings, QThreadPool, Slot, Qt
+from PySide6.QtCore import QSettings, QThreadPool, Slot
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QMainWindow, QStackedWidget, QWidget, QFileDialog, QScrollArea, QTextEdit, QStatusBar
-from gui_utils import clear_layout, disable_button, create_label, create_line, create_button, create_comboBox, \
-    create_textEdit, create_textBrowser, add_widgets_to_gridlayout, add_widgets_to_vhboxlayout, create_layout, enable_button
+from PySide6.QtWidgets import QMainWindow, QStackedWidget, QWidget, QFileDialog, QStatusBar
+from gui_utils import disable_button, create_label, create_button, create_textBrowser, add_widgets_to_gridlayout, create_layout, enable_button
 import gui_css as sss
 from dvatioff_audio.WAAPI.waapi_connector import WaapiConnectWorker
 from functools import partial
 from dvatioff_audio.WAAPI.waapi_object_selector import WwiseObjectSelectWorker
-from dvatioff_audio.utils import load_dict_from_json_file, save_dict_to_json_file, open_url
+from dvatioff_audio.utils import open_url
+import dvatioff_audio.globals as g
 
 
 class MainWindow(QMainWindow):
@@ -110,6 +110,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.setCurrentIndex(index)
 
     # START ------------------ 状态栏相关 ------------------
+
     def init_status_bar(self):
         """
         初始化状态栏
@@ -180,7 +181,7 @@ class MainWindow(QMainWindow):
     def get_selected_objects(self, selected_objects):
         if len(selected_objects) != len(self.wwise_selected_objects) or any(a != b for a, b in zip(selected_objects, self.wwise_selected_objects)):
             self.wwise_selected_objects = selected_objects
-            self.add_scroll_content(self.layout_scroll_event_soundbank)
+            # self.add_scroll_content(self.layout_scroll_event_soundbank)
 
     @Slot(str, str)
     def get_wwise_project_name_info(self, project_name, wwise_version):
@@ -189,21 +190,8 @@ class MainWindow(QMainWindow):
 
     # END ------------------ 状态栏相关 ------------------
 
-    def disable_buttons(self):
-        """
-        禁用所有按钮
-        """
-        for button in self.buttons_all:
-            button.setDisabled(True)
-
-    def enable_buttons(self):
-        """
-        启用所有按钮
-        """
-        for button in self.buttons_connect_activate:
-            button.setDisabled(False)
-
     # START ------------------ 页面相关 ------------------
+
     # ================== 音效占位导入 ==================
     def create_page_sfx_import(self):
         """
@@ -234,8 +222,22 @@ class MainWindow(QMainWindow):
             [button_import, 3, 0, 1, 3]
         ])
 
-
     # END ------------------ 页面相关 ------------------
+
+    def disable_buttons(self):
+        """
+        禁用所有按钮
+        """
+        for button in self.buttons_all:
+            button.setDisabled(True)
+
+    def enable_buttons(self):
+        """
+        启用所有按钮
+        """
+        for button in self.buttons_connect_activate:
+            button.setDisabled(False)
+
     def open_file_dialog(self, textBrowser, button_name_vfy, button_import):
         last_file_path = self.setting.value("last_file_path", "")
         file_path, _ = QFileDialog.getOpenFileName(self, '选择文件', last_file_path, "Excel 文件 (*.xlsx)")
