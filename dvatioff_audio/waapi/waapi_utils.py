@@ -46,7 +46,7 @@ def get_object(client, object_path):
 @retry(Exception, tries=10, delay=1)
 def get_object_waql(client, waql):
     """
-    获取 Wwise 对象信息
+    使用 WAQL 获取 Wwise 对象信息
     """
     try:
         args = {
