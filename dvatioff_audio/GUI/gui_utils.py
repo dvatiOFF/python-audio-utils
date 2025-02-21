@@ -1,7 +1,74 @@
-from PySide6.QtCore import Qt, QUrl
+from PySide6.QtCore import Qt, QUrl, QTimer, QObject, QEvent, QPoint
 from PySide6.QtGui import QDesktopServices, QIntValidator
 from PySide6.QtWidgets import QLabel, QFrame, QPushButton, QLineEdit, QComboBox, QTextEdit, QTextBrowser, QStatusBar, QVBoxLayout, QHBoxLayout, QGridLayout, \
-    QFormLayout, QCheckBox
+    QFormLayout, QCheckBox, QApplication
+
+
+class CustomTooltip(QFrame):
+    def __init__(self, text, parent=None):
+        super().__init__(parent, Qt.ToolTip)
+        self.setFrameShape(QFrame.Box)
+        self.setFrameShadow(QFrame.Plain)
+        self.setLineWidth(1)
+        self.setStyleSheet("""
+            QFrame {
+                background-color: #9998a7;
+                color: white;
+                border-radius: 2px;
+                padding: 1px;
+            }
+            QLabel {
+                font-family: "Microsoft YaHei";
+                font-size: 9pt;
+            }
+        """)
+        self.label = QLabel(text)
+        layout = QVBoxLayout()
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+        self.adjustSize()
+
+
+class TooltipManager(QObject):
+    def __init__(self, widget, tooltip_text, hover_delay=100):
+        super().__init__(widget)
+        self.widget = widget
+        self.tooltip_text = tooltip_text
+        self.hover_delay = hover_delay  # 毫秒
+
+        self.tooltip = CustomTooltip(self.tooltip_text, parent=widget)
+        self.tooltip.hide()
+
+        self.hover_timer = QTimer(self)
+        self.hover_timer.setSingleShot(True)
+        self.hover_timer.timeout.connect(self.show_tooltip)
+
+        self.hide_timer = QTimer(self)
+        self.hide_timer.setSingleShot(True)
+        self.hide_timer.timeout.connect(self.hide_tooltip)
+
+        self.widget.installEventFilter(self)
+
+    def eventFilter(self, obj, event):
+        if obj == self.widget:
+            if event.type() == QEvent.Enter:
+                self.hover_timer.start(self.hover_delay)
+            elif event.type() == QEvent.Leave:
+                self.hover_timer.stop()
+                self.hide_timer.stop()
+                self.hide_tooltip()
+        return super().eventFilter(obj, event)
+
+    def show_tooltip(self):
+        if not self.tooltip.isVisible():
+            # 获取全局位置，并调整 tooltip 位置
+            global_pos = self.widget.mapToGlobal(QPoint(0, self.widget.height()))
+            self.tooltip.move(global_pos)
+            self.tooltip.show()
+
+    def hide_tooltip(self):
+        if self.tooltip.isVisible():
+            self.tooltip.hide()
 
 
 def clear_layout(layout):
@@ -74,7 +141,7 @@ def create_layout(layout_type, parent=None, spacing=None, margin=None):
     return layout
 
 
-def create_label(text, style=None, width=None, height=None, alignment=None, external_link=False, link_activate=False, invisible=False):
+def create_label(text, style=None, width=None, height=None, alignment=None, external_link=False, link_activate=False, invisible=False, tooltip=""):
     """
     创建标签
     """
@@ -93,6 +160,8 @@ def create_label(text, style=None, width=None, height=None, alignment=None, exte
         label.linkActivated.connect(open_link)
     if invisible:
         label.setVisible(False)
+    if tooltip:
+        TooltipManager(label, tooltip)
 
     return label
 
@@ -110,7 +179,7 @@ def create_line(height=None):
     return line
 
 
-def create_button(text, style=None, width=None, height=None, enabled=True, clicked=None, invisible=False):
+def create_button(text, style=None, width=None, height=None, enabled=True, clicked=None, invisible=False, tooltip=""):
     """
     创建按钮
     """
@@ -125,18 +194,19 @@ def create_button(text, style=None, width=None, height=None, enabled=True, click
         button.clicked.connect(clicked)
     if invisible:
         button.setVisible(False)
+    if tooltip:
+        TooltipManager(button, tooltip)
     button.setEnabled(enabled)
 
     return button
 
 
-def create_lineEdit(text="", width=None, style=None, text_changed=None, int_validator=False, read_only=False, invisible=False):
+def create_lineEdit(text="", width=None, style=None, text_changed=None, int_validator=False, read_only=False, invisible=False, tooltip=""):
     """
     创建文本框
     """
     lineEdit = QLineEdit(text)
     if read_only:
-        # lineEdit.setStyleSheet("border: 2px solid gray;")
         lineEdit.setStyleSheet("background-color: #c8c8c8;")
         lineEdit.setReadOnly(True)
     if width:
@@ -149,11 +219,13 @@ def create_lineEdit(text="", width=None, style=None, text_changed=None, int_vali
         lineEdit.setValidator(QIntValidator())
     if invisible:
         lineEdit.setVisible(False)
+    if tooltip:
+        TooltipManager(lineEdit, tooltip)
 
     return lineEdit
 
 
-def create_comboBox(width=None, style=None, items=None, current_changed=None, invisible=False):
+def create_comboBox(width=None, style=None, items=None, current_changed=None, invisible=False, tooltip=""):
     """
     创建下拉框
     """
@@ -169,11 +241,13 @@ def create_comboBox(width=None, style=None, items=None, current_changed=None, in
         comboBox.currentTextChanged.connect(current_changed)
     if invisible:
         comboBox.setVisible(False)
+    if tooltip:
+        TooltipManager(comboBox, tooltip)
 
     return comboBox
 
 
-def create_checkBox(text=None, width=None, checked=False, state_changed=None):
+def create_checkBox(text=None, width=None, checked=False, state_changed=None, tooltip=""):
     """
     创建复选框
     """
@@ -183,11 +257,13 @@ def create_checkBox(text=None, width=None, checked=False, state_changed=None):
     checkBox.setChecked(checked)
     if state_changed:
         checkBox.stateChanged.connect(state_changed)
+    if tooltip:
+        TooltipManager(checkBox, tooltip)
 
     return checkBox
 
 
-def create_textEdit(default_text="", width=None, max_height=None, read_only=False, line_wrap_mode=None):
+def create_textEdit(default_text="", width=None, max_height=None, read_only=False, line_wrap_mode=None, tooltip=""):
     """
     创建文本编辑框
     """
@@ -200,11 +276,12 @@ def create_textEdit(default_text="", width=None, max_height=None, read_only=Fals
         textEdit.setReadOnly(True)
     if line_wrap_mode:
         textEdit.setLineWrapMode(line_wrap_mode)
-
+    if tooltip:
+        TooltipManager(textEdit, tooltip)
     return textEdit
 
 
-def create_textBrowser(width=None, height=None):
+def create_textBrowser(width=None, height=None, tooltip=""):
     """
     创建文本浏览器
     """
@@ -213,6 +290,8 @@ def create_textBrowser(width=None, height=None):
         textBrowser.setFixedWidth(width)
     if height:
         textBrowser.setFixedHeight(height)
+    if tooltip:
+        TooltipManager(textBrowser, tooltip)
 
     return textBrowser
 
@@ -243,10 +322,10 @@ def add_widgets_to_vhboxlayout(layout, widgets):
         layout.addWidget(widget, stretch, alignment)
 
 
-def open_link(link):
+def open_local_url(url):
     """
-    打开链接
+    打开本地链接
     """
-    url = link.replace("\\", "/")
+    url = url.replace("\\", "/")
     url = QUrl.fromLocalFile(url)
     QDesktopServices.openUrl(url)
