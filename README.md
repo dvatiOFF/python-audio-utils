@@ -1,6 +1,7 @@
 # dvatioff-audio
 
-A general-purpose function library for Wwise-based game audio tool development.  
+A general-purpose function library for Wwise-based game audio tool development.
+
 为基于 Wwise 的游戏音频工具开发准备的通用功能库。
 
 ---
@@ -8,6 +9,7 @@ A general-purpose function library for Wwise-based game audio tool development. 
 ## Introduction / 介绍
 
 This library is a collection of general-purpose utility functions specifically designed for developing game audio tools based on Wwise. It mainly consists of the following four components:
+
 本库是套专为基于 Wwise 的游戏音频工具开发设计的通用功能函数集合，主要由以下 4 个部分组成：
 
 - **WAAPI**
