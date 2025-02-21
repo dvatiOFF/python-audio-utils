@@ -18,10 +18,10 @@ OTHER_DEPENDENCY = True  # 是否复制其他依赖文件，由于 Pyinstaller �
 
 
 def build_main(main_file,  app_name='main', noconsole=True, windowed=False, onefile=False):
-    if os.path.exists('build'):
-        shutil.rmtree('build')
-    if os.path.exists('dist'):
-        shutil.rmtree('dist')
+    if os.path.exists('../../build'):
+        shutil.rmtree('../../build')
+    if os.path.exists('../../dist'):
+        shutil.rmtree('../../dist')
 
     command = ['pyinstaller', main_file, '--clean']
     if app_name:

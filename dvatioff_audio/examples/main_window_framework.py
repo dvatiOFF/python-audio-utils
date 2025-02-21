@@ -1,11 +1,11 @@
 from PySide6.QtCore import QSettings, QThreadPool, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMainWindow, QStackedWidget, QWidget, QFileDialog, QStatusBar
-from gui_utils import disable_button, create_label, create_button, create_textBrowser, add_widgets_to_gridlayout, create_layout, enable_button
-import gui_css as sss
-from dvatioff_audio.WAAPI.waapi_connector import WaapiConnectWorker
+from dvatioff_audio.gui.gui_utils import disable_button, create_label, create_button, create_textBrowser, add_widgets_to_gridlayout, create_layout, enable_button
+import dvatioff_audio.gui.gui_css as css
+from dvatioff_audio.waapi.waapi_connector import WaapiConnectWorker
 from functools import partial
-from dvatioff_audio.WAAPI.waapi_object_selector import WwiseObjectSelectWorker
+from dvatioff_audio.waapi.waapi_object_selector import WwiseObjectSelectWorker
 from dvatioff_audio.utils import open_url
 import dvatioff_audio.globals as g
 
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
         设置菜单栏
         """
         menu_bar = self.menuBar()
-        menu_bar.setStyleSheet(sss.FONT_PURE)
+        menu_bar.setStyleSheet(css.FONT_PURE)
 
         menu_vo = menu_bar.addMenu("语音")
         action_vo_import = menu_vo.addAction("语音占位导入")
@@ -117,10 +117,10 @@ class MainWindow(QMainWindow):
         """
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
-        self.status_message = create_label("未连接至 Wwise Authoring", sss.LABEL_STYLE_STATUS)
+        self.status_message = create_label("未连接至 Wwise Authoring", css.LABEL_STYLE_STATUS)
         self.statusBar.addPermanentWidget(self.status_message)
-        self.status_color = create_label("  ", sss.LABEL_STATUS_RED, 16, 16)
-        self.status_color.setStyleSheet(sss.LABEL_STATUS_RED)
+        self.status_color = create_label("  ", css.LABEL_STATUS_RED, 16, 16)
+        self.status_color.setStyleSheet(css.LABEL_STATUS_RED)
         self.statusBar.addPermanentWidget(self.status_color)
 
     def execute_waapi_connect_worker(self):
@@ -139,27 +139,27 @@ class MainWindow(QMainWindow):
         self.connect_status = status
         if status:
             if self.wwise_project_name == g.WWISE_PROJECT_NAME and self.wwise_version == g.WWISE_VERSION:
-                self.status_color.setStyleSheet(sss.LABEL_STATUS_GREEN)
+                self.status_color.setStyleSheet(css.LABEL_STATUS_GREEN)
                 self.status_message.setText(f"{self.wwise_project_name} - {self.wwise_version} 已连接")
                 self.enable_buttons()
                 self.connected = g.CONNECTED
             elif self.wwise_project_name == g.WWISE_PROJECT_NAME and self.wwise_version != g.WWISE_VERSION:
-                self.status_color.setStyleSheet(sss.LABEL_STATUS_YELLOW)
+                self.status_color.setStyleSheet(css.LABEL_STATUS_YELLOW)
                 self.status_message.setText(f"{self.wwise_project_name} - {self.wwise_version} 已连接 (Wwise 版本不匹配)")
                 self.disable_buttons()
                 self.connected = g.WRONG_CONNECTED
             elif self.wwise_project_name != g.WWISE_PROJECT_NAME and self.wwise_version == g.WWISE_VERSION:
-                self.status_color.setStyleSheet(sss.LABEL_STATUS_YELLOW)
+                self.status_color.setStyleSheet(css.LABEL_STATUS_YELLOW)
                 self.status_message.setText(f"{self.wwise_project_name} - {self.wwise_version} 已连接 (Wwise 工程不匹配)")
                 self.disable_buttons()
                 self.connected = g.WRONG_CONNECTED
             else:
-                self.status_color.setStyleSheet(sss.LABEL_STATUS_YELLOW)
+                self.status_color.setStyleSheet(css.LABEL_STATUS_YELLOW)
                 self.status_message.setText(f"{self.wwise_project_name} - {self.wwise_version} 已连接 (Wwise 工程和版本不匹配)")
                 self.disable_buttons()
                 self.connected = g.WRONG_CONNECTED
         else:
-            self.status_color.setStyleSheet(sss.LABEL_STATUS_RED)
+            self.status_color.setStyleSheet(css.LABEL_STATUS_RED)
             self.status_message.setText("未连接至 Wwise Authoring")
             self.disable_buttons()
             self.connected = g.UNCONNECTED
@@ -203,13 +203,13 @@ class MainWindow(QMainWindow):
         layout = create_layout("grid", self.page_sfx_import, margin=(50, 50, 50, 50))
 
         # ================== 元素添加 ==================
-        title = create_label("音效占位导入", sss.LABEL_STYLE_TITLE, height=80)
+        title = create_label("音效占位导入", css.LABEL_STYLE_TITLE, height=80)
 
-        label_select_excel = create_label("选择 Excel 文件: ", sss.LABEL_STYLE, width=100)
+        label_select_excel = create_label("选择 Excel 文件: ", css.LABEL_STYLE, width=100)
         textBrowser_select_execl = create_textBrowser(width=700, height=36)
-        button_select_excel = create_button("选择", sss.BUTTON_STYLE_PINK, tooltip="选择导入音效所需的 Excel 文件")
-        button_name_vfy = create_button("音频文件名校验", sss.BUTTON_STYLE_PINK, enabled=False)
-        button_import = create_button("导入", sss.BUTTON_STYLE_PINK, enabled=False)
+        button_select_excel = create_button("选择", css.BUTTON_STYLE_PINK, tooltip="选择导入音效所需的 Excel 文件")
+        button_name_vfy = create_button("音频文件名校验", css.BUTTON_STYLE_PINK, enabled=False)
+        button_import = create_button("导入", css.BUTTON_STYLE_PINK, enabled=False)
 
         # ================== 事件绑定 ==================
         button_select_excel.clicked.connect(partial(self.open_file_dialog, textBrowser_select_execl, button_name_vfy, button_import))

@@ -6,7 +6,7 @@
 import time
 from PySide6.QtCore import Signal, QRunnable, QObject
 import threading
-from dvatioff_audio.WAAPI.waapi_utils import get_selected_objects
+from dvatioff_audio.waapi.waapi_utils import get_selected_objects
 
 
 class SignalSelectedObjects(QObject):

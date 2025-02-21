@@ -1,5 +1,5 @@
 """
-此脚本中的类用于启动一个子线程，实时获取工具与 Wwise 工程 WAAPI 通信接口的连接状态，并通过 Signal 信号将连接状态的信息传递给主线程
+此脚本中的类用于启动一个子线程，实时获取工具与 Wwise 工程 waapi 通信接口的连接状态，并通过 Signal 信号将连接状态的信息传递给主线程
 """
 
 
@@ -8,7 +8,7 @@ import asyncio
 import waapi
 from PySide6.QtCore import Signal, QRunnable, QObject
 import threading
-from dvatioff_audio.WAAPI.waapi_utils import get_connected_project_name_info
+from dvatioff_audio.waapi.waapi_utils import get_connected_project_name_info
 
 
 # 用于发送连接状态的信号
@@ -16,7 +16,7 @@ class SignalConnectionStatus(QObject):
     signal = Signal(bool)
 
 
-# 用于发送 WAAPI 客户端的信号
+# 用于发送 waapi 客户端的信号
 class SignalClient(QObject):
     signal = Signal(object)
 
@@ -56,7 +56,7 @@ class WaapiConnectWorker(QRunnable):
 
     def connect_to_waapi(self):
         """
-        尝试连接到 WAAPI 并更新UI信号。如果已连接，直接返回
+        尝试连接到 waapi 并更新UI信号。如果已连接，直接返回
         """
         if self.client and self.client.is_connected():
             return
@@ -70,7 +70,7 @@ class WaapiConnectWorker(QRunnable):
             else:
                 self.handle_failed_connection()
         except waapi.CannotConnectToWaapiException as e:
-            print(f"无法连接到 WAAPI: {e}")
+            print(f"无法连接到 waapi: {e}")
             self.handle_failed_connection()
 
     def reset_client(self):

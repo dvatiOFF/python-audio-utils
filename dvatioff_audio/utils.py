@@ -7,8 +7,8 @@ import ctypes
 import os
 from datetime import datetime
 import shutil
-from dvatioff_audio.WAAPI.waapi_utils import get_wwise_originals_sfx_path
-from dvatioff_audio.Voice.voice_utils import text_distance
+from dvatioff_audio.waapi.waapi_utils import get_wwise_originals_sfx_path
+from dvatioff_audio.voice.voice_utils import text_distance
 import sys
 import subprocess
 
@@ -78,7 +78,7 @@ def is_loop(name):
 
 def is_voice(name):
     """
-    是否是 Voice 类声音
+    是否是 voice 类声音
     """
     head = name.split("_")[0]
     pattern = r"VO$"

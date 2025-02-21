@@ -10,10 +10,10 @@ import time
 from PySide6.QtCore import  QRunnable, QObject, Signal, QThreadPool
 from PySide6.QtGui import QTextCursor, QIcon
 from PySide6.QtWidgets import QWidget
-import gui_css as sss
+import dvatioff_audio.gui.gui_css as css
 from notification_window_framework import NotificationWindow
-from dvatioff_audio.Voice.voice_utils import text_speech_verify_worker, output_text_speech_verify_result
-from dvatioff_audio.GUI.gui_utils import create_label, create_button, add_widgets_to_vhboxlayout, create_layout, create_textEdit
+from dvatioff_audio.voice.voice_utils import text_speech_verify_worker, output_text_speech_verify_result
+from dvatioff_audio.gui.gui_utils import create_label, create_button, add_widgets_to_vhboxlayout, create_layout, create_textEdit
 from dvatioff_audio.globals import PATH_ICON_VFY
 
 
@@ -76,15 +76,15 @@ class TextSpeechVFYWindow(QWidget):
 
         self.layout = create_layout('vbox', self)
 
-        self.label_all_log = create_label('全部日志', style=sss.LABEL_STYLE_SIZE15)
-        self.label_error_log = create_label('错误日志', style=sss.LABEL_STYLE_SIZE15)
+        self.label_all_log = create_label('全部日志', style=css.LABEL_STYLE_SIZE15)
+        self.label_error_log = create_label('错误日志', style=css.LABEL_STYLE_SIZE15)
         self.label_cur_folder = create_label('<b>当前文件夹:</b> ')
         self.label_cur_detection_progress = create_label('<b>当前文件夹检测进度:</b> ')
         self.label_total_detection_progress = create_label('<b>总检测进度:</b> ')
         self.text_all_log = create_textEdit(read_only=True, max_height=600)
         self.text_error_log = create_textEdit(read_only=True, max_height=400)
 
-        self.output_button = create_button('输出错误文件和日志', style=sss.BUTTON_STYLE_PINK, enabled=False)
+        self.output_button = create_button('输出错误文件和日志', style=css.BUTTON_STYLE_PINK, enabled=False)
         self.output_button.clicked.connect(self.output_log_and_files)
 
         add_widgets_to_vhboxlayout(self.layout, [
@@ -145,48 +145,48 @@ class TextSpeechVFYWindow(QWidget):
         self.text_error_log.ensureCursorVisible()
 
         if true_text == "本句为呼喝声，跳过检测":
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>当前检测文件:</b> {file_name}</font><br>")
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['blue']}>{true_text}，跳过检测</font><br><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>当前检测文件:</b> {file_name}</font><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['blue']}>{true_text}，跳过检测</font><br><br>")
             return
         elif true_text == "Azure 接口调用失败":
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>当前检测文件:</b> {file_name}<br>")
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['pink']}>{true_text}，跳过检测</font><br><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>当前检测文件:</b> {file_name}<br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['pink']}>{true_text}，跳过检测</font><br><br>")
             return
 
-        self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>正确文本:</b> {true_text}</font><br>")
-        self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>识别文本:</b> {speech_text}</font><br>")
+        self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>正确文本:</b> {true_text}</font><br>")
+        self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>识别文本:</b> {speech_text}</font><br>")
 
         if self.language == "Chinese":
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>正确拼音:</b> {true_pinyin}</font><br>")
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>识别拼音:</b> {speech_pinyin}</font><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>正确拼音:</b> {true_pinyin}</font><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>识别拼音:</b> {speech_pinyin}</font><br>")
         elif self.language == "Japanese":
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>正确假名:</b> {true_kata}</font><br>")
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>识别假名:</b> {speech_kata}</font><br>")
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>正确罗马音:</b> {true_kata_romaji}</font><br>")
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>识别罗马音:</b> {speech_kata_romaji}</font><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>正确假名:</b> {true_kata}</font><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>识别假名:</b> {speech_kata}</font><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>正确罗马音:</b> {true_kata_romaji}</font><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>识别罗马音:</b> {speech_kata_romaji}</font><br>")
 
         if wer < 0.2:
-            self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['green']}><b>匹配度:</b> {(1 - wer) * 100:.2f}%</font><br><br>")
+            self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['green']}><b>匹配度:</b> {(1 - wer) * 100:.2f}%</font><br><br>")
         else:
             self.error_file_paths.append(file_path)
-            self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>错误文件:</b> {file_name}</font><br>")
-            self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>正确文本:</b> {true_text}</font><br>")
-            self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>识别文本:</b> {speech_text}</font><br>")
+            self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>错误文件:</b> {file_name}</font><br>")
+            self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>正确文本:</b> {true_text}</font><br>")
+            self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>识别文本:</b> {speech_text}</font><br>")
             if self.language == "Chinese":
-                self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>正确拼音:</b> {true_pinyin}</font><br>")
-                self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>识别拼音:</b> {speech_pinyin}</font><br>")
+                self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>正确拼音:</b> {true_pinyin}</font><br>")
+                self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>识别拼音:</b> {speech_pinyin}</font><br>")
             elif self.language == "Japanese":
-                self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>正确假名:</b> {true_kata}</font><br>")
-                self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>识别假名:</b> {speech_kata}</font><br>")
-                self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>正确罗马音:</b> {true_kata_romaji}</font><br>")
-                self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['black']}><b>识别罗马音:</b> {speech_kata_romaji}</font><br>")
+                self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>正确假名:</b> {true_kata}</font><br>")
+                self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>识别假名:</b> {speech_kata}</font><br>")
+                self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>正确罗马音:</b> {true_kata_romaji}</font><br>")
+                self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['black']}><b>识别罗马音:</b> {speech_kata_romaji}</font><br>")
             if wer >= 0.5:
-                self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['red']}><b>匹配度:</b> {(1 - wer) * 100:.2f}%</font><br><br>")
-                self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['red']}><b>匹配度:</b> {(1 - wer) * 100:.2f}%</font><br><br>")
+                self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['red']}><b>匹配度:</b> {(1 - wer) * 100:.2f}%</font><br><br>")
+                self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['red']}><b>匹配度:</b> {(1 - wer) * 100:.2f}%</font><br><br>")
 
             elif 0.2 <= wer < 0.5:
-                self.text_all_log.textCursor().insertHtml(f"<font color={sss.COLOR['orange']}><b>匹配度:</b> {(1 - wer) * 100:.2f}</font><br><br>")
-                self.text_error_log.textCursor().insertHtml(f"<font color={sss.COLOR['orange']}><b>匹配度:</b> {(1 - wer) * 100:.2f}</font><br><br>")
+                self.text_all_log.textCursor().insertHtml(f"<font color={css.COLOR['orange']}><b>匹配度:</b> {(1 - wer) * 100:.2f}</font><br><br>")
+                self.text_error_log.textCursor().insertHtml(f"<font color={css.COLOR['orange']}><b>匹配度:</b> {(1 - wer) * 100:.2f}</font><br><br>")
 
         # 保持文本窗口的焦点跟随
         cursor_all_log = self.text_all_log.textCursor()

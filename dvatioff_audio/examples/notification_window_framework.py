@@ -1,9 +1,9 @@
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QWidget
-import gui_css as sss
+import dvatioff_audio.gui.gui_css as css
 from dvatioff_audio.globals import PATH_ICON_WARNING
-from gui_utils import create_label, create_button, add_widgets_to_vhboxlayout, create_layout
+from dvatioff_audio.gui.gui_utils import create_label, create_button, add_widgets_to_vhboxlayout, create_layout
 
 
 class NotificationWindow(QWidget):
@@ -25,8 +25,8 @@ class NotificationWindow(QWidget):
 
         layout = create_layout('vbox', self)
 
-        label_message = create_label(self.message, sss.LABEL_STYLE_NORMAL, alignment=Qt.AlignCenter)
-        button_ok = create_button('确认', sss.BUTTON_STYLE_PINK)
+        label_message = create_label(self.message, css.LABEL_STYLE_NORMAL, alignment=Qt.AlignCenter)
+        button_ok = create_button('确认', css.BUTTON_STYLE_PINK)
         button_ok.clicked.connect(self.confirm)
 
         add_widgets_to_vhboxlayout(layout, [

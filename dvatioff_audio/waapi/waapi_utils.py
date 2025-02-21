@@ -338,10 +338,10 @@ def delete_object(client, obj):
         return None
 
 
-# 下面的函数无需连接 WAAPI 即可调用
+# 下面的函数无需连接 waapi 即可调用
 def assign_obj_to_dynamic_event_path(container_dict, dynamic_event_wwu_path, wwu_guid):
     """
-    由于 WAAPI 无法直接为 Dynamic Event 中的各 path 指定对象，因此需要通过解析 Wwise Work Unit 文件来实现
+    由于 waapi 无法直接为 Dynamic Event 中的各 path 指定对象，因此需要通过解析 Wwise Work Unit 文件来实现
     在指定规则下为 Dynamic Event 中的各 path 指定对象
     """
     tree = etree.parse(dynamic_event_wwu_path)

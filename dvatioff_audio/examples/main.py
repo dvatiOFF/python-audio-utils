@@ -7,7 +7,7 @@ def main():
     from PySide6.QtCore import QTimer
     from PySide6.QtWidgets import QApplication
     from qt_material import apply_stylesheet
-    from dvatioff_audio.GUI.main_window_framework import MainWindow
+    from dvatioff_audio.examples.main_window_framework import MainWindow
 
     app = QApplication()
     QTimer.singleShot(100, minimize_console)
