@@ -24,9 +24,9 @@ This library is a collection of general-purpose utility functions specifically d
 - **Utils**
     
     - System-level utility functions, including Retry decorators, JSON read/write utilities, file operations, path handling, spreadsheet processing, and common regular expressions for audio file naming
-- **Others**
+- **Examples**
     
-    - Other modules, such as build automation scripts and a NAS-based automatic update checker
+    - example scripts, such as GUI Windows, build automation scripts and a NAS-based automatic update checker
 
 
 ---
@@ -59,8 +59,8 @@ pip install dvatioff-audio
 	- 对 Pyside6 常用 GUI 元素创建的封装
 - **Utils**
 	- 系统级通用函数，如 Retry 装饰器、JSON 读取保存、文件操作、路径处理、表格处理、常用音频命名正则表达式等
-- **其他**
-	- 其他模块，比如 build 自动化脚本；基于 NAS 的程序自动更新检测模块等
+- **示例**
+	- 示例脚本，比如 GUI 窗口， build 自动化脚本，基于 NAS 的程序自动更新检测模块等
 
 ## 安装
 
