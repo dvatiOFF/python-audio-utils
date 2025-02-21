@@ -1,11 +1,8 @@
-from PySide6.QtGui import QTextCharFormat, QBrush, QColor, QFont
-
-
-GREEN_COLOR_1 = '#739072'
+STATUS_GREEN_COLOR_1 = '#739072'
 BLUE_COLOR_1 = '#596FB7'
 YELLOW_COLOR_1 = '#F3CA52'
 
-FONT_PURE = """
+FONT = """
     font-family: 'Microsoft YaHei';
 """
 
@@ -123,7 +120,7 @@ BUTTON_STYLE_GREEN = """
             }
         """
 
-BUTTON_STYLE_TRANSPARENT = """
+BUTTON_STYLE_GREEN_TRANSPARENT = """
             QPushButton {
                 font-family: "Microsoft YaHei";
                 background-color: transparent; /* 修改为透明背景 */
@@ -245,19 +242,3 @@ SCROLL_AREA_ORANGE = """
                 border: 2px solid #f7ceb1;
             }
         """
-
-text_format_black = QTextCharFormat()
-text_format_black.setForeground(QBrush(QColor(COLOR['black'])))
-text_format_blue = QTextCharFormat()
-text_format_blue.setForeground(QBrush(QColor(COLOR['blue'])))
-text_format_green = QTextCharFormat()
-text_format_green.setForeground(QBrush(QColor(COLOR['green'])))
-text_format_red = QTextCharFormat()
-text_format_red.setForeground(QBrush(QColor(COLOR['red'])))
-text_format_orange = QTextCharFormat()
-text_format_orange.setForeground(QBrush(QColor(COLOR['orange'])))
-text_format_pink = QTextCharFormat()
-text_format_pink.setForeground(QBrush(QColor(COLOR['pink'])))
-
-text_bold = QTextCharFormat()
-text_bold.setFontWeight(QFont.Bold)
