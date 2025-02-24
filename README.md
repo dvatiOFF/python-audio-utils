@@ -39,7 +39,6 @@ pip install dvatioff-audio
 ```
 
 ---
----
 
 为基于 Wwise 的游戏音频工具开发准备的通用功能库。
 
